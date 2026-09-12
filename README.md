@@ -40,13 +40,7 @@ Designed according to `outside_bubble_scraper_service_spec.md`.
 
 ## 🚀 Quickstart
 
-### Running with Docker
-
-```bash
-docker-compose up --build
-```
-
-### Running Locally with Python
+### 1. Running Locally with Python (Recommended for Development)
 
 ```bash
 # 1. Install dependencies
@@ -55,9 +49,33 @@ pip install -r requirements.txt
 # 2. Install Playwright Chromium
 playwright install chromium
 
-# 3. Start the service
-uvicorn apps.scraper_service.main:app --host 0.0.0.0 --port 8000 --reload
+# 3. Start the service (choose one):
+python scripts/control_scraper.py serve --port 8000
+# OR via uvicorn directly:
+python -m uvicorn apps.scraper_service.main:app --host 127.0.0.1 --port 8000 --reload
 ```
+
+Once started, open your browser to **[http://127.0.0.1:8000](http://127.0.0.1:8000)** (automatically redirects to the interactive Swagger UI).
+
+### 2. Running with Docker (Requires Docker Desktop)
+
+```bash
+docker compose up -d --build
+```
+
+---
+
+### ⚠️ Common Troubleshooting
+
+- **"Address already in use" / Port 8000 occupied:**  
+  If the scraper is already running in another terminal or background process, stop it with:
+  ```bash
+  python scripts/control_scraper.py teardown
+  ```
+- **"Docker daemon not running / pipe not found":**  
+  Ensure Docker Desktop is open and started before running `docker compose`, or simply use the Python command above (`python scripts/control_scraper.py serve`).
+- **Interactive Documentation:**  
+  Interactive Swagger UI is available at [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs).
 
 ---
 

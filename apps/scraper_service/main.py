@@ -6,6 +6,7 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 
 from apps.scraper_service.config import settings
@@ -48,6 +49,11 @@ app.add_middleware(
 storage_path = Path(settings.local_storage_dir)
 storage_path.mkdir(parents=True, exist_ok=True)
 app.mount("/storage", StaticFiles(directory=str(storage_path)), name="storage")
+
+@app.get("/", include_in_schema=False)
+async def root_redirect():
+    """Redirect root path to interactive Swagger documentation."""
+    return RedirectResponse(url="/docs")
 
 # Include main router
 app.include_router(router)
