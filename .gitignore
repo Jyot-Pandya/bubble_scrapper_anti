@@ -1,0 +1,26 @@
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Pytest
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Scraper local storage artifacts
+storage/
+artifacts/
+*.log
+*.pid
+.scraper-verify.pid
+
+# IDE & Editor
+.vscode/
+.idea/

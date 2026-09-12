@@ -1,0 +1,33 @@
+services:
+  scraper-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: outside-bubble-scraper
+    ports:
+      - "8000:8000"
+    environment:
+      - SCRAPER_ENVIRONMENT=production
+      - SCRAPER_LOG_LEVEL=INFO
+      - SCRAPER_BROWSER_ENABLED=true
+      - SCRAPER_BROWSER_HEADLESS=true
+      - SCRAPER_BROWSER_POOL_SIZE=4
+      - SCRAPER_CACHE_ENABLED=true
+      - SCRAPER_CACHE_TTL_SECONDS=3600
+      - SCRAPER_GLOBAL_CONCURRENCY_LIMIT=20
+      - SCRAPER_DOMAIN_CONCURRENCY_LIMIT=2
+      - SCRAPER_SSRF_PROTECTION_ENABLED=true
+      - SCRAPER_STORAGE_PROVIDER=local
+      - SCRAPER_LOCAL_STORAGE_DIR=/app/storage
+    volumes:
+      - scraper_storage:/app/storage
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+volumes:
+  scraper_storage:
